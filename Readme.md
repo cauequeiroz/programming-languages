@@ -6,7 +6,12 @@ In this repository will store my solutions for University of Washington courses:
  - [Programming Languages, Part C](https://www.coursera.org/learn/programming-languages-part-c)
 
 
-**Progress**
-- [ ] Part A
+**Programming Languages, Part A**
+- [x] Week 1
+- [ ] Week 2
+- [ ] Week 3
+- [ ] Week 4
+- [ ] Week 5
+
 - [ ] Part B
 - [ ] Part C
