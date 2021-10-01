@@ -98,3 +98,46 @@ val number_in_months_test7 = number_in_months([(2012,2,28), (2013,12,1), (2011,3
 val number_in_months_test8 = number_in_months([(2012,2,28), (2013,12,1), (2011,3,31), (2011,4,28)], [2, 4]) = 2
 val number_in_months_test9 = number_in_months([(2012,2,28), (2013,12,1), (2011,3,31), (2011,4,28)], [2, 3, 4]) = 3
 val number_in_months_test10 = number_in_months([(2012,2,28), (2013,4,1), (2011,3,31), (2011,4,28)], [2, 3, 4]) = 4
+
+
+(* ==========================================================================
+
+    (listof Date) Month -> (listof Date)
+
+    Returns a list with all dates that are in the given month.
+
+========================================================================== *)
+fun dates_in_month (dates: (int * int * int) list, month: int) =
+    if null dates
+    then []
+    else
+        if #2 (hd dates) = month
+        then (hd dates)::dates_in_month(tl dates, month)
+        else dates_in_month(tl dates, month)
+
+val dates_in_month_test1 = dates_in_month([], 2) = []
+val dates_in_month_test2 = dates_in_month([(2012,4,28)], 2) = []
+val dates_in_month_test3 = dates_in_month([(2012,2,28)], 2) = [(2012,2,28)]
+val dates_in_month_test4 = dates_in_month([(2012,2,28), (2013,12,1)], 1) = []
+val dates_in_month_test5 = dates_in_month([(2012,2,28), (2013,12,1)], 2) = [(2012,2,28)]
+val dates_in_month_test6 = dates_in_month([(2012,12,28), (2013,12,1)], 12) = [(2012,12,28), (2013,12,1)]
+
+
+(* ==========================================================================
+
+    (listof Date) (listof Month) -> (listof Date)
+
+    Returns a list with all dates that are in the given list of months.
+
+========================================================================== *)
+fun dates_in_months (dates: (int * int * int) list, months: int list) =
+    if null dates orelse null months
+    then []
+    else dates_in_month(dates, hd months) @ dates_in_months(dates, tl months)
+
+val dates_in_months_test1 = dates_in_months([], []) = []
+val dates_in_months_test2 = dates_in_months([], [2,3,4]) = []
+val dates_in_months_test3 = dates_in_months([(2012,2,28),(2013,12,1),(2011,3,31),(2011,4,28)], []) = []
+val dates_in_months_test4 = dates_in_months([(2012,2,28),(2013,12,1),(2011,3,31),(2011,4,28)], [6, 8]) = []
+val dates_in_months_test5 = dates_in_months([(2012,2,28),(2013,12,1),(2011,3,31),(2011,4,28)], [2,3,4]) =
+    [(2012,2,28), (2011,3,31), (2011,4,28)]
