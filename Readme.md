@@ -8,7 +8,7 @@ In this repository will store my solutions for University of Washington courses:
 
 **Programming Languages, Part A**
 - [x] Week 1
-- [ ] Week 2
+- [x] Week 2
 - [ ] Week 3
 - [ ] Week 4
 - [ ] Week 5

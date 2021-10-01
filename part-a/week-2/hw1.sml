@@ -40,15 +40,6 @@ fun is_older (d1: (int * int * int), d2: (int * int * int)) =
         (d1_year = d2_year andalso d1_month = d2_month andalso d1_day < d2_day)
     end
 
-val is_older_test0 = is_older((1, 2, 3), (2, 3, 4)) = true
-val is_older_test1 = is_older((2021, 4, 3), (2021, 4, 3)) = false
-val is_older_test2 = is_older((2021, 4, 4), (2021, 4, 3)) = false
-val is_older_test3 = is_older((2021, 5, 2), (2021, 4, 3)) = false
-val is_older_test4 = is_older((2022, 3, 2), (2021, 4, 3)) = false
-val is_older_test5 = is_older((2021, 4, 2), (2021, 4, 3)) = true
-val is_older_test6 = is_older((2021, 3, 2), (2021, 4, 2)) = true
-val is_older_test7 = is_older((2020, 4, 2), (2021, 4, 2)) = true
-
 
 (* ==========================================================================
 
@@ -64,13 +55,6 @@ fun number_in_month (dates: (int * int * int) list, month: int) =
         if #2 (hd dates) = month
         then 1 + number_in_month(tl dates, month)
         else number_in_month(tl dates, month)
-
-val number_in_month_test1 = number_in_month([], 2) = 0
-val number_in_month_test2 = number_in_month([(2012, 1, 28)], 2) = 0
-val number_in_month_test3 = number_in_month([(2012, 2, 28)], 2) = 1
-val number_in_month_test4 = number_in_month([(2012, 8, 28), (2013, 12, 1)], 2) = 0
-val number_in_month_test5 = number_in_month([(2012, 2, 28), (2013, 12, 1)], 2) = 1
-val number_in_month_test6 = number_in_month([(2012, 2, 28), (2013, 2, 1)], 2) = 2
 
 
 (* ==========================================================================
@@ -88,18 +72,6 @@ fun number_in_months (dates: (int * int * int) list, months: int list) =
         number_in_month(dates, hd months) + number_in_months(dates, tl months)
 
 
-val number_in_months_test1 = number_in_months([], []) = 0
-val number_in_months_test2 = number_in_months([], [1, 2]) = 0
-val number_in_months_test3 = number_in_months([(2012,2,28), (2013,12,1)], []) = 0
-val number_in_months_test4 = number_in_months([(2012,2,28), (2013,12,1), (2011,3,31), (2011,4,28)], [1]) = 0
-val number_in_months_test5 = number_in_months([(2012,2,28), (2013,12,1), (2011,3,31), (2011,4,28)], [2]) = 1
-val number_in_months_test6 = number_in_months([(2012,2,28), (2013,12,1), (2011,3,31), (2011,4,28)], [1, 7]) = 0
-val number_in_months_test7 = number_in_months([(2012,2,28), (2013,12,1), (2011,3,31), (2011,4,28)], [1, 2]) = 1
-val number_in_months_test8 = number_in_months([(2012,2,28), (2013,12,1), (2011,3,31), (2011,4,28)], [2, 4]) = 2
-val number_in_months_test9 = number_in_months([(2012,2,28), (2013,12,1), (2011,3,31), (2011,4,28)], [2, 3, 4]) = 3
-val number_in_months_test10 = number_in_months([(2012,2,28), (2013,4,1), (2011,3,31), (2011,4,28)], [2, 3, 4]) = 4
-
-
 (* ==========================================================================
 
     (listof Date) Month -> (listof Date)
@@ -115,13 +87,6 @@ fun dates_in_month (dates: (int * int * int) list, month: int) =
         then (hd dates)::dates_in_month(tl dates, month)
         else dates_in_month(tl dates, month)
 
-val dates_in_month_test1 = dates_in_month([], 2) = []
-val dates_in_month_test2 = dates_in_month([(2012,4,28)], 2) = []
-val dates_in_month_test3 = dates_in_month([(2012,2,28)], 2) = [(2012,2,28)]
-val dates_in_month_test4 = dates_in_month([(2012,2,28), (2013,12,1)], 1) = []
-val dates_in_month_test5 = dates_in_month([(2012,2,28), (2013,12,1)], 2) = [(2012,2,28)]
-val dates_in_month_test6 = dates_in_month([(2012,12,28), (2013,12,1)], 12) = [(2012,12,28), (2013,12,1)]
-
 
 (* ==========================================================================
 
@@ -135,9 +100,117 @@ fun dates_in_months (dates: (int * int * int) list, months: int list) =
     then []
     else dates_in_month(dates, hd months) @ dates_in_months(dates, tl months)
 
-val dates_in_months_test1 = dates_in_months([], []) = []
-val dates_in_months_test2 = dates_in_months([], [2,3,4]) = []
-val dates_in_months_test3 = dates_in_months([(2012,2,28),(2013,12,1),(2011,3,31),(2011,4,28)], []) = []
-val dates_in_months_test4 = dates_in_months([(2012,2,28),(2013,12,1),(2011,3,31),(2011,4,28)], [6, 8]) = []
-val dates_in_months_test5 = dates_in_months([(2012,2,28),(2013,12,1),(2011,3,31),(2011,4,28)], [2,3,4]) =
-    [(2012,2,28), (2011,3,31), (2011,4,28)]
+
+(* ==========================================================================
+
+    (listof string) int -> string
+
+    Returns the element of the given list in the given position.
+
+========================================================================== *)
+fun get_nth (elements: string list, position: int) =
+    if null elements orelse position = 0
+    then ""
+    else
+        if (position - 1) = 0
+        then hd elements
+        else get_nth(tl elements, position - 1)
+
+
+(* ==========================================================================
+
+    Date -> string
+
+    Returns the element of the given list in the given position.
+
+========================================================================== *)
+fun date_to_string (date: int * int * int) =
+    get_nth(
+        ["January", "February", "March", "April",
+        "May", "June", "July", "August", "September",
+        "October", "November", "December"], #2 date) ^
+    " " ^
+    Int.toString (#3 date) ^
+    ", " ^
+    Int.toString (#1 date)
+
+
+(* ==========================================================================
+
+    int (listof int) -> int
+
+    Returns how many itens in the given list add to less than sum.
+
+========================================================================== *)
+fun number_before_reaching_sum (sum: int, numbers: int list) = 
+    let
+        fun count(counter:int, acc: int, numbers: int list) =
+            if null numbers
+            then counter
+            else
+                if (acc + hd numbers) >= sum
+                then counter
+                else count(counter + 1, acc + hd numbers, tl numbers)
+    in
+        count(0, 0, numbers)
+    end
+
+
+(* ==========================================================================
+
+    DayOfYear -> int
+
+    Returns in what month number the given day of the year is in.
+
+========================================================================== *)
+fun what_month(day: int) =
+    let
+        val days_by_month = [31,28,31,30,31,30,31,31,30,31,30,31]
+    in
+        number_before_reaching_sum(day, days_by_month) + 1
+    end
+
+
+(* ==========================================================================
+
+    DayOfYear DayOfYear -> (listof int)
+
+    Returns a list with month of each day between the range of the two given
+    days, including both.
+    - If the first day is greater than second one, returns an empty list
+
+========================================================================== *)
+fun month_range(day1: int, day2: int) =
+    if day1 > day2
+    then []
+    else what_month(day1)::month_range(day1 + 1, day2)
+
+
+(* ==========================================================================
+
+    (listof Date) -> Date option
+
+    Returns NONE if list has no dates or SOME Date for the oldest
+    date in the list.
+
+========================================================================== *)
+fun oldest(dates: (int * int * int) list) = 
+    if null dates
+    then NONE
+    else
+        let
+            fun oldest(dates: (int * int * int) list) =
+                if null (tl dates)
+                then hd dates
+                else 
+                    let
+                        val oldest_from_tail = oldest(tl dates)
+                    in
+                        if is_older(hd dates, oldest_from_tail)
+                        then hd dates
+                        else oldest_from_tail
+                    end
+
+        in
+            SOME (oldest dates)
+        end
