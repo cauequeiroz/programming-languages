@@ -68,6 +68,17 @@ fun countdown_list (x: int) =
     then []
     else x :: countdown_list(x-1)
 
+fun countup_list (x: int) =
+    let
+        fun count_up (from: int) =
+            if from = x
+            then x::[]
+            else from::count_up(from + 1)
+    in
+        count_up(1)
+    end
+
+
 fun append_list (xs: int list, ys: int list) =
     if null xs
     then ys
@@ -84,3 +95,47 @@ fun firsts (xs: (int * int) list) =
     else #1 (hd xs) :: firsts(tl xs)
 
 
+(* local variables & options  *)
+
+fun find_max (xs: int list) =
+    if null xs
+    then NONE
+    else if null (tl xs)
+    then SOME (hd xs)
+    else
+        let
+            val check_tail = find_max(tl xs)
+        in
+            if isSome check_tail andalso valOf check_tail > hd xs
+            then check_tail
+            else SOME (hd xs)
+        end
+
+fun find_min (xs: int list) =
+    if null xs
+    then NONE
+    else
+        let 
+            fun min (xs: int list) =
+                if null (tl xs)
+                then hd xs
+                else
+                    let
+                        val check_tail = min(tl xs)
+                    in
+                        if hd xs < check_tail
+                        then hd xs
+                        else check_tail
+                    end
+        in
+            SOME (min xs)
+        end
+
+
+(* boolean & comparasion operations *)
+
+val test_and = 5 > 4 andalso 3 < 2
+val test_or = 5 > 4 orelse 3 < 2
+val test_not = not true
+val test_equal = 5 = 4
+val test_not_equal = 5 <> 4
