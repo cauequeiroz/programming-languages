@@ -96,7 +96,7 @@ fun dates_in_month (dates: (int * int * int) list, month: int) =
 
 ========================================================================== *)
 fun dates_in_months (dates: (int * int * int) list, months: int list) =
-    if null dates orelse null months
+    if null months
     then []
     else dates_in_month(dates, hd months) @ dates_in_months(dates, tl months)
 
@@ -112,7 +112,7 @@ fun get_nth (elements: string list, position: int) =
     if null elements orelse position = 0
     then ""
     else
-        if (position - 1) = 0
+        if position = 1
         then hd elements
         else get_nth(tl elements, position - 1)
 
@@ -125,15 +125,17 @@ fun get_nth (elements: string list, position: int) =
 
 ========================================================================== *)
 fun date_to_string (date: int * int * int) =
-    get_nth(
-        ["January", "February", "March", "April",
+    let
+        val months = ["January", "February", "March", "April",
         "May", "June", "July", "August", "September",
-        "October", "November", "December"], #2 date) ^
-    " " ^
-    Int.toString (#3 date) ^
-    ", " ^
-    Int.toString (#1 date)
-
+        "October", "November", "December"]
+    in
+        get_nth(months, #2 date) ^
+        " " ^
+        Int.toString (#3 date) ^
+        ", " ^
+        Int.toString (#1 date)
+    end
 
 (* ==========================================================================
 
@@ -199,12 +201,12 @@ fun oldest(dates: (int * int * int) list) =
     then NONE
     else
         let
-            fun oldest(dates: (int * int * int) list) =
+            fun get_oldest(dates: (int * int * int) list) =
                 if null (tl dates)
                 then hd dates
                 else 
                     let
-                        val oldest_from_tail = oldest(tl dates)
+                        val oldest_from_tail = get_oldest(tl dates)
                     in
                         if is_older(hd dates, oldest_from_tail)
                         then hd dates
@@ -212,5 +214,5 @@ fun oldest(dates: (int * int * int) list) =
                     end
 
         in
-            SOME (oldest dates)
+            SOME (get_oldest dates)
         end
