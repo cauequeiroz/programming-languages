@@ -61,3 +61,19 @@ val howManyAdd_test2 = howManyAdd(Add (Constant 1, Constant 2)) = 1
 val howManyAdd_test3 = howManyAdd(Negate (Constant 4)) = 0
 val howManyAdd_test4 = howManyAdd(Negate (Add (Constant 1, Constant 2))) = 1
 val howManyAdd_test5 = howManyAdd(Negate (Add (Add (Constant 1, Constant 2), Constant 2))) = 2
+
+
+fun sumAllItems numbers =
+  case numbers of
+    [] => 0
+  | first::rest => first + sumAllItems rest
+
+fun appendNumbers (ns1, ns2) =
+  case ns1 of
+    [] => ns2
+  | first::rest => first::appendNumbers(rest, ns2)
+
+fun sumTupple (a, b, c) = a + b + c 
+
+fun fullName {first=x, last=y} = x ^ " " ^ y
+fun fullName2 person = let val {first=x, last=y} = person in x ^ " " ^ y end
