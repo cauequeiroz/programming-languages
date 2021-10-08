@@ -90,33 +90,18 @@ fun card_value (suit, rank) =
   - raise exception if card is not on the list
 *)
 fun remove_card (cardlist, card, err) =
-  let
-    fun filter_list (list, acc) =
-      case list of 
-        [] => acc
-      | x::xs => if x = card
-                 then acc @ xs
-                 else filter_list(xs, acc @ [x])
-
-    val filtered_list = filter_list(cardlist, [])
-  in
-    if filtered_list = cardlist
-    then raise err
-    else filtered_list
-  end
+  case cardlist of
+    [] => raise err
+  | x::xs => if x = card
+             then xs
+             else x::remove_card(xs, card, err)
 
 
 fun all_same_color cardlist =
-  let
-    fun check_color (list, color) =
-      case list of
-        [] => true
-      | x::xs => if card_color x <> color then false else check_color(xs, color)
-  in
-    case cardlist of 
-      [] => true
-    | x::xs => check_color(xs, card_color x)
-  end
+  case cardlist of
+    [] => true
+  | [_] => true
+  | x::y::xs => card_color x = card_color y andalso all_same_color(y::xs)
 
 
 fun sum_cards cardlist = 
@@ -130,3 +115,31 @@ fun sum_cards cardlist =
   end
 
 
+fun score (cardlist, goal) =
+  let
+    val sum = sum_cards cardlist
+    val prescore = if sum > goal
+                   then 3 * (sum - goal)
+                   else goal - sum
+  in
+    if all_same_color cardlist
+    then prescore div 2
+    else prescore
+  end
+
+
+fun officiate (cardlist, movelist, goal) =
+  let
+    fun mount_hand_cards (deck, movelist, hand) =
+      if sum_cards hand > goal
+      then hand
+      else
+        case movelist of
+          [] => hand
+        | (Discard card)::rest_movelist => mount_hand_cards(deck, rest_movelist, remove_card(hand, card, IllegalMove))
+        | Draw::rest_movelist => case deck of
+                                  [] => hand
+                                | x::rest_deck => mount_hand_cards(rest_deck, rest_movelist, x::hand)
+  in
+    score(mount_hand_cards(cardlist, movelist, []), goal)
+  end

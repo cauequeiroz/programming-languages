@@ -53,3 +53,23 @@ val sum_cards_test1 = sum_cards [] = 0
 val sum_cards_test2 = sum_cards [(Clubs, Num 2),(Clubs, Num 2)] = 4
 val sum_cards_test3 = sum_cards [(Clubs, Num 2),(Clubs, Num 2),(Clubs, Ace)] = 15
 val sum_cards_test4 = sum_cards [(Clubs, Num 2),(Clubs, Num 2),(Clubs, King)] = 14
+
+val score_test1 = score ([(Hearts, Num 2),(Clubs, Num 4)],10) = 4 (* sum <= goal, different color *)
+val score_test2 = score ([(Hearts, Num 2),(Hearts, Num 4)],10) = 2 (* sum <= goal, same color *)
+val score_test3 = score ([(Hearts, Num 6),(Clubs, Num 4)],10) = 0 (* sum = goal, different color *)
+val score_test4 = score ([(Hearts, Num 6),(Hearts, Num 4)],10) = 0 (* sum = goal, same color *)
+val score_test5 = score ([(Hearts, Num 8),(Clubs, Num 4)],10) = 6 (* sum > goal, different color *)
+val score_test6 = score ([(Hearts, Num 8),(Hearts, Num 4)],10) = 3 (* sum > goal, same color *)
+
+val officiate_test1 = officiate ([(Hearts, Num 2),(Clubs, Num 4)],[Draw], 15) = 6
+
+val officiate_test2 = officiate ([(Clubs,Ace),(Spades,Ace),(Clubs,Ace),(Spades,Ace)],
+                        [Draw,Draw,Draw,Draw,Draw],
+                        42)
+             = 3
+
+val officiate_test3 = ((officiate([(Clubs,Jack),(Spades,Num(8))],
+                         [Draw,Discard(Hearts,Jack)],
+                         42);
+               false) 
+              handle IllegalMove => true)
