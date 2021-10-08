@@ -77,3 +77,14 @@ fun sumTupple (a, b, c) = a + b + c
 
 fun fullName {first=x, last=y} = x ^ " " ^ y
 fun fullName2 person = let val {first=x, last=y} = person in x ^ " " ^ y end
+
+
+(* Exceptions  *)
+exception InvalidName
+
+fun checkName name =
+  if name = "Caue"
+  then true
+  else raise InvalidName
+
+val checkName_test = checkName "Jessica" handle InvalidName => false
