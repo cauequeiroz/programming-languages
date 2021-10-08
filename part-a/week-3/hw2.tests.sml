@@ -26,3 +26,30 @@ val similar_names_test3 = similar_names ([["Fred","Fredrick"],["Jeff","Jeffrey"]
 val similar_names_test4 = similar_names ([["Fred","Fredrick"],["Elizabeth","Betty"],["Freddie","Fred","F"]], {first="Fred", middle="W", last="Smith"}) =
 	    [{first="Fred", last="Smith", middle="W"}, {first="Fredrick", last="Smith", middle="W"},
 	     {first="Freddie", last="Smith", middle="W"}, {first="F", last="Smith", middle="W"}]
+
+val card_color_test1 = card_color (Clubs, Num 2) = Black
+val card_color_test2 = card_color (Spades, Num 2) = Black
+val card_color_test3 = card_color (Diamonds, Num 2) = Red
+val card_color_test4 = card_color (Hearts, Num 2) = Red
+
+val card_value_test1 = card_value (Clubs, Num 2) = 2
+val card_value_test2 = card_value (Clubs, Num 7) = 7
+val card_value_test3 = card_value (Clubs, Ace) = 11
+val card_value_test4 = card_value (Clubs, King) = 10
+val card_value_test5 = card_value (Clubs, Queen) = 10
+val card_value_test6 = card_value (Clubs, Jack) = 10
+
+val remove_card_test1 = remove_card ([(Hearts, Ace)], (Hearts, Ace), IllegalMove) = []
+val remove_card_test2 = remove_card ([(Hearts, Ace), (Hearts, Ace)], (Hearts, Ace), IllegalMove) = [(Hearts, Ace)]
+val remove_card_test3 = (remove_card ([(Hearts, King)], (Hearts, Ace), IllegalMove) handle IllegalMove => []) = []
+
+val all_same_color_test1 = all_same_color [] = true
+val all_same_color_test2 = all_same_color [(Hearts, Ace)] = true
+val all_same_color_test3 = all_same_color [(Hearts, Ace), (Hearts, Ace)] = true
+val all_same_color_test4 = all_same_color [(Hearts, Ace), (Clubs, Ace)] = false
+val all_same_color_test5 = all_same_color [(Hearts, Ace), (Diamonds, Ace), (Spades, King)] = false
+
+val sum_cards_test1 = sum_cards [] = 0
+val sum_cards_test2 = sum_cards [(Clubs, Num 2),(Clubs, Num 2)] = 4
+val sum_cards_test3 = sum_cards [(Clubs, Num 2),(Clubs, Num 2),(Clubs, Ace)] = 15
+val sum_cards_test4 = sum_cards [(Clubs, Num 2),(Clubs, Num 2),(Clubs, King)] = 14

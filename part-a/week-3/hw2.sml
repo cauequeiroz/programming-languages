@@ -6,12 +6,7 @@
 fun same_string(s1 : string, s2 : string) =
     s1 = s2
 
-(*
-  String (listof String) -> NONE | SOME (listof String)
-
-  Return NONE if string is not in the list, otherwise return
-  the given list without the given string
-*)
+(* put your solutions for problem 1 here *)
 fun all_except_option (str, strlist) =
   let
     fun filter_list list =
@@ -29,12 +24,6 @@ fun all_except_option (str, strlist) =
   end
 
 
-(* 
-  (listof (listof String)) String -> (listof String)
-
-  Returns a list with all items in the given list that matches with
-  the given string, without insert the given string
-*)
 fun get_substitutions1 (substitutions, name) =
   case substitutions of
     [] => []
@@ -43,14 +32,6 @@ fun get_substitutions1 (substitutions, name) =
                       | SOME list => list @ get_substitutions1 (rest, name)
 
 
-(* 
-  (listof (listof String)) String -> (listof String)
-
-  Returns a list with all items in the given list that matches with
-  the given string, without insert the given string
-
-  Tail-recursive version!
-*)
 fun get_substitutions2 (substitutions, name) =
   let
     fun mount_list (list, acc) =
@@ -63,14 +44,7 @@ fun get_substitutions2 (substitutions, name) =
     mount_list(substitutions, [])
   end
 
-(* 
-  (listof (listof String)) {first:String, middle:String, last:String}
-  ->
-  (listof {first:String, middle:String, last:String})
 
-  Returns a list with all the possible full names by substituting for the first name
-  using the names on the given list.
-*)
 fun similar_names (substitutions, {first=fname, middle=mname, last=lname}) =
   let
     val names = get_substitutions2(substitutions, fname)
@@ -96,3 +70,63 @@ datatype move = Discard of card | Draw
 exception IllegalMove
 
 (* put your solutions for problem 2 here *)
+
+fun card_color (suit, rank) = 
+  case suit of
+    Clubs => Black
+  | Spades => Black
+  | _ => Red
+
+
+fun card_value (suit, rank) = 
+  case rank of
+    Num i => i
+  | Ace => 11
+  | _ => 10
+
+(*
+  Removes card from list of cards
+  - remove only the first occurency
+  - raise exception if card is not on the list
+*)
+fun remove_card (cardlist, card, err) =
+  let
+    fun filter_list (list, acc) =
+      case list of 
+        [] => acc
+      | x::xs => if x = card
+                 then acc @ xs
+                 else filter_list(xs, acc @ [x])
+
+    val filtered_list = filter_list(cardlist, [])
+  in
+    if filtered_list = cardlist
+    then raise err
+    else filtered_list
+  end
+
+
+fun all_same_color cardlist =
+  let
+    fun check_color (list, color) =
+      case list of
+        [] => true
+      | x::xs => if card_color x <> color then false else check_color(xs, color)
+  in
+    case cardlist of 
+      [] => true
+    | x::xs => check_color(xs, card_color x)
+  end
+
+
+fun sum_cards cardlist = 
+  let
+    fun sum_all (list, acc) =
+      case list of 
+        [] => acc
+      | x::xs => sum_all(xs, acc + card_value x)
+  in
+    sum_all(cardlist, 0)
+  end
+
+
