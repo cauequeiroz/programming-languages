@@ -48,5 +48,24 @@ val longest_capitalized = longest_string3 o only_capitals
 
 val rev_string = String.implode o List.rev o String.explode
 
+fun first_answer func elements =
+  case elements of
+    [] => raise NoAnswer
+  | x::xs => case func x of
+              SOME v => v
+            | NONE => first_answer func xs
 
+fun all_answers func elements =     
+  let
+    fun loop lst acc =
+      case lst of
+        [] => SOME acc
+      | x::xs => case func x of
+                        NONE => NONE
+                      | SOME i => loop xs (acc @ i)
+  in  
+    case elements of
+      [] => SOME []
+    | x::xs => loop elements []
+  end
 
