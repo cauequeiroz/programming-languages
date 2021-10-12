@@ -69,3 +69,34 @@ fun all_answers func elements =
     | x::xs => loop elements []
   end
 
+val count_wildcards =
+  g (fn () => 1) (fn x => 0)
+
+val count_wild_and_variable_lengths =
+  g (fn () => 1) (fn x => String.size x)
+
+fun count_some_var (name, p) =
+  g (fn () => 0) (fn x => if x = name then 1 else 0) p
+
+fun check_pat p = 
+  let
+    fun get_variable_list p =
+      case p of
+        Variable x        => [x]
+      | TupleP ps         => List.foldl (fn (p, acc) => (get_variable_list p) @ acc) [] ps
+      | ConstructorP(_,p) => get_variable_list p
+      | _                 => []
+
+    fun only_unique lst =
+      case lst of
+        [] => true
+      | head::tail => if (List.exists (fn x => x = head) tail)
+                      then false
+                      else only_unique tail
+  in
+    only_unique (get_variable_list p)
+  end
+
+
+fun match (v, p) = SOME []
+fun first_match v ps = SOME []

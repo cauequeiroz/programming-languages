@@ -10,7 +10,7 @@ In this repository will store my solutions for University of Washington courses:
 - [x] Week 1
 - [x] Week 2
 - [x] Week 3
-- [ ] Week 4
+- [x] Week 4
 - [ ] Week 5
 
 - [ ] Part B
