@@ -82,3 +82,5 @@ val map_with_currying_test = map_with_currying (fn x => x * 2) [1, 2, 3]
 
 val doubleEveryItem = map_with_currying double
 val doubledItems = doubleEveryItem [1, 2, 3, 4, 5]
+
+
