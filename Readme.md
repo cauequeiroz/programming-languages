@@ -13,5 +13,9 @@ In this repository will store my solutions for University of Washington courses:
 - [x] Week 4
 - [x] Week 5
 
-- [ ] Part B
+**Programming Languages, Part B**  
+- [ ] Week 1
+- [ ] Week 2
+- [ ] Week 3
+
 - [ ] Part C
