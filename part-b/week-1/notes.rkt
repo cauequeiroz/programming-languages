@@ -41,3 +41,20 @@
       null
       (cons (fn (car xs)) (map-all fn (cdr xs)))))
 
+; Conditionals
+(define (do-math op x y)
+  (cond [(string=? op "sum") (+ x y)]
+        [(string=? op "sub") (- x y)]
+        [else (* x y)]))
+
+; Local bindings
+; let    - normal local bidings
+; let*   - local bindings that uses the previous local bindings
+; letrec - local bindings that allows mutual recursive calls (only with lambdas)
+(define (max-number xs)
+  (cond [(null? xs) (error "empty list not allowed")]
+        [(null? (cdr xs)) (car xs)]
+        [else (let ([tail-max-number (max-number (cdr xs))])
+                (if (> tail-max-number (car xs))
+                    tail-max-number
+                    (car xs)))]))
