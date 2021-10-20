@@ -58,3 +58,38 @@
                 (if (> tail-max-number (car xs))
                     tail-max-number
                     (car xs)))]))
+
+; fancy stuff
+; (mcons ... ...) create mutable cons structure
+; (set! variable-name new-value) to mutate previous variables
+; (set-mcar! / set-mcdr! variable-name new-value) update mcons structure values
+; (begin e1 e2 ... en) executes each expression and return the last one
+; (lambda() exp) creates a thunk
+
+; Stream
+; pairs with (value, next-stream)
+
+; 1 1 1 1 ...
+(define stream-ones (lambda() (cons 1 stream-ones)))
+
+; 1 2 3 4 ...
+(define stream-naturals
+  (letrec ([next-natural (lambda (x)(cons x (lambda() (next-natural (+ x 1)))))])
+    (lambda() (next-natural 1))))
+
+; 2 4 8 16 ...
+(define stream-doubles
+  (letrec ([next-double (lambda (n) (cons n (lambda() (next-double (* n 2)))))])
+    (lambda () (next-double 2))))
+
+; Consuming a stream
+; (how-many-until stream-doubles (lambda (x) (> x 10)))
+(define (how-many-until stream condition)
+  (letrec ([loop (lambda (stream acc)
+                (let* ([unpacked-stream (stream)]
+                       [stream-value (car unpacked-stream)]
+                       [stream-next (cdr unpacked-stream)])
+                  (if (condition stream-value)
+                      acc
+                      (loop stream-next (+ acc 1)))))])
+    (loop stream 1)))
