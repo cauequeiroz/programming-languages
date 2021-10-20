@@ -68,7 +68,6 @@
 
 ; Stream
 ; pairs with (value, next-stream)
-
 ; 1 1 1 1 ...
 (define stream-ones (lambda() (cons 1 stream-ones)))
 
@@ -86,10 +85,34 @@
 ; (how-many-until stream-doubles (lambda (x) (> x 10)))
 (define (how-many-until stream condition)
   (letrec ([loop (lambda (stream acc)
-                (let* ([unpacked-stream (stream)]
-                       [stream-value (car unpacked-stream)]
-                       [stream-next (cdr unpacked-stream)])
-                  (if (condition stream-value)
-                      acc
-                      (loop stream-next (+ acc 1)))))])
+                   (let* ([unpacked-stream (stream)]
+                          [stream-value (car unpacked-stream)]
+                          [stream-next (cdr unpacked-stream)])
+                     (if (condition stream-value)
+                         acc
+                         (loop stream-next (+ acc 1)))))])
     (loop stream 1)))
+
+; Memoization
+; create a cache system to register previous computations
+(define (fibo-at-nth x)
+  (if (or (= x 1) (= x 2))
+      1
+      (+ (fibo-at-nth (- x 1))
+         (fibo-at-nth (- x 2)))))
+
+(define (fibonacci n)
+  (letrec ([cache null]
+           [fibo-at-nth
+            (lambda (n) (let ([saved (assoc n cache)])
+                          (if saved
+                              (cdr saved)
+                              (let ([new-number
+                                     (if (or (= n 1) (= n 2))
+                                         1
+                                         (+ (fibo-at-nth (- n 1))
+                                            (fibo-at-nth (- n 2))))])
+                                (begin
+                                  (set! cache (cons (cons n new-number) cache))
+                                  new-number)))))])
+    (fibo-at-nth n)))
