@@ -47,8 +47,8 @@
 
 (define (stream-add-zero stream)
   (let ([next-item (lambda (item stream)
-                        (cons (cons 0 item)
-                              (stream-add-zero stream)))])
+                     (cons (cons 0 item)
+                           (stream-add-zero stream)))])
     (lambda () (next-item (car (stream)) (cdr (stream))))))
 
 
@@ -62,15 +62,30 @@
 
 (define (vector-assoc x items)
   (letrec ([loop (lambda (x items count)
-                (if (= count (vector-length items))
-                    #f
-                    (if (and (pair? (vector-ref items count))
-                             (not (list? (vector-ref items count)))
-                             (equal? x (car (vector-ref items count))))
-                        (vector-ref items count)
-                        (loop x items (add1 count)))))])
+                   (if (= count (vector-length items))
+                       #f
+                       (let ([item (vector-ref items count)])
+                         (if (and (pair? item)
+                                  (not (list? item))
+                                  (equal? x (car item)))
+                             item
+                             (loop x items (add1 count))))))])
     (loop x items 0)))
-  
+
+
+(define (cached-assoc xs n)
+  (letrec ([cache (make-vector n #f)]
+           [cache-pos 0])
+    (lambda (x)
+      (let ([cached-ans (vector-assoc x cache)])
+        (if cached-ans
+            cached-ans
+            (let ([ans (assoc x xs)])
+              (begin
+                (vector-set! cache cache-pos ans)
+                (set! cache-pos (if (= (add1 cache-pos) (vector-length cache)) 0 (add1 cache-pos)))
+                ans)))))))
+                
 
 
 
@@ -86,5 +101,3 @@
 
 
 
-
-  
