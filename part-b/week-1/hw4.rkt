@@ -46,10 +46,10 @@
 
 
 (define (stream-add-zero stream)
-  (let ([next-item (lambda (item stream)
-                     (cons (cons 0 item)
-                           (stream-add-zero stream)))])
-    (lambda () (next-item (car (stream)) (cdr (stream))))))
+  (lambda ()
+    (let ([x (stream)])
+      (cons (cons 0 (car x))
+            (stream-add-zero (cdr x))))))
 
 
 (define (cycle-lists xs ys)
