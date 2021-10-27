@@ -87,8 +87,8 @@
                (eval-under-env (fun-body (closure-fun c))
                                (if (fun-nameopt (closure-fun c))
                                    (cons (cons (fun-nameopt (closure-fun c)) c)
-                                         (cons (fun-formal (closure-fun c)) arg-val)
-                                         (closure-env c))
+                                         (cons (cons (fun-formal (closure-fun c)) arg-val)
+                                               (closure-env c)))
                                    (cons (cons (fun-formal (closure-fun c)) arg-val)
                                          (closure-env c))))))]
 
